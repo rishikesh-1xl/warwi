@@ -1,0 +1,32 @@
+# Environment files
+.env
+.env.*
+!.env.example
+venv/
+.venv/
+env/
+
+# Python cache and test artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Browser automation artifacts
+screenshots/
+videos/
+traces/
+test-results/
+allure-results/
+
+# OS files
+.DS_Store
+Thumbs.db
