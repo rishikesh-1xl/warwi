@@ -46,3 +46,8 @@ def test_verify_active_subscription_card(companies_page):
 def test_verify_expired_card(companies_page):
 
     assert companies_page.is_summary_card_displayed("Expired")
+
+@pytest.mark.tc_companies_009
+def test_verify_auto_refresh_checkbox(companies_page):
+
+    assert companies_page.is_auto_refresh_checkbox_displayed()
