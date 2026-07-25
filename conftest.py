@@ -10,6 +10,26 @@ from pages.login_page import LoginPage
 from pages.dashboard_page import DashboardPage
 
 from components.left_menu import LeftMenu
+from pages.companies_page import CompaniesPage
+from pages.plans_page import PlansPage
+from pages.billing_dashboard_page import BillingDashboardPage
+from pages.leads_page import LeadsPage
+from pages.lead_connectors_page import LeadConnectorsPage
+
+from pages.coupon_codes_page import CouponCodesPage
+from pages.referral_program_page import ReferralProgramPage
+from pages.announcements_page import AnnouncementsPage
+
+...
+
+@pytest.fixture(scope="function")
+def companies_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_companies()
+
+    return CompaniesPage(login)
 
 load_dotenv()
 
@@ -99,3 +119,83 @@ def dashboard_page(login):
 def dashboard_page(login):
     return DashboardPage(login)
 
+#---------------Organisation Sub menus-------------------#
+
+@pytest.fixture(scope="function")
+def companies_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_companies()
+
+    return CompaniesPage(login)
+
+@pytest.fixture(scope="function")
+def plans_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_plans()
+
+    return PlansPage(login)
+
+
+@pytest.fixture(scope="function")
+def billing_dashboard_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_billing_dashboard()
+
+    return BillingDashboardPage(login)
+
+
+@pytest.fixture(scope="function")
+def leads_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_leads()
+
+    return LeadsPage(login)
+
+
+@pytest.fixture(scope="function")
+def lead_connectors_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_lead_connectors()
+
+    return LeadConnectorsPage(login)
+
+#---------------------Marketing sub menus----------------
+
+@pytest.fixture(scope="function")
+def coupon_codes_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_coupon_codes()
+
+    return CouponCodesPage(login)
+
+
+@pytest.fixture(scope="function")
+def referral_program_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_referral_program()
+
+    return ReferralProgramPage(login)
+
+
+@pytest.fixture(scope="function")
+def announcements_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_announcements()
+
+    return AnnouncementsPage(login)
