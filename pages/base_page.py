@@ -39,7 +39,24 @@ class BasePage:
 
     def select_dropdown_by_text(self, locator, text):
 
-        self.page.locator(locator).select_option(label=text)
+        dropdown = self.page.locator(locator)
+
+        try:
+            dropdown.select_option(label=text)
+        except:
+            options = dropdown.locator("option")
+
+            for i in range(options.count()):
+                option = options.nth(i)
+
+                option_text = option.text_content().strip()
+
+                if text.lower() in option_text.lower():
+                    value = option.get_attribute("value")
+                    dropdown.select_option(value=value)
+                    return
+
+            raise Exception(f"'{text}' not found in dropdown")
 
     def get_validation_message(self, locator):
 
@@ -83,3 +100,21 @@ class BasePage:
     def get_current_url(self):
 
         return self.page.url
+
+
+
+    def get_table_headers(self, locator):
+
+        headers = self.page.locator(locator)
+
+        expect(headers.first).to_be_visible(timeout=10000)
+
+        actual_headers = []
+
+        for i in range(headers.count()):
+            text = headers.nth(i).text_content().strip()
+
+            if text:
+                actual_headers.append(text)
+
+        return actual_headers
