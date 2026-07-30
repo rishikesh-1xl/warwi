@@ -79,10 +79,27 @@ class LeftMenu(BasePage):
         if self.page.locator(self.COMPANIES).is_visible():
             self.click(self.ORGANISATION)
 
+    # def click_companies(self):
+
+    #     self.open_organisation()
+    #     self.click(self.COMPANIES)
+
     def click_companies(self):
 
-        self.open_organisation()
-        self.click(self.COMPANIES)
+        print("Before:", self.page.url)
+
+        self.click(self.ORGANISATION)
+
+        self.page.wait_for_timeout(1000)
+
+        print("Companies count:",
+            self.page.locator(self.COMPANIES).count())
+
+        self.page.locator(self.COMPANIES).first.click()
+
+        self.page.wait_for_timeout(2000)
+
+        print("After:", self.page.url)
 
     def click_plans(self):
 
