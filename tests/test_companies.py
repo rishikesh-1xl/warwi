@@ -259,37 +259,195 @@ def test_verify_search_textbox(companies_page):
         "placeholder"
     ) == "Search by Company Name, Email ID..."
 
-@pytest.mark.tc_companies_033
+@pytest.mark.tc_companies_029
+def test_verify_search_using_email(companies_page):
+
+    # Generate unique test data
+    data = TestDataGenerator.company()
+
+    # ---------- Create Company ----------
+
+    companies_page.click_add_company_button()
+
+    assert companies_page.is_add_company_page_displayed()
+
+    # Company Information
+    companies_page.fill_company_name(data["company_name"])
+    companies_page.select_country("India")
+    companies_page.select_purchase_country("Not locked yet")
+
+    # Admin Credentials
+    companies_page.fill_admin_name(data["admin_name"])
+    companies_page.fill_admin_email(data["admin_email"])
+    companies_page.fill_admin_password(data["admin_password"])
+
+    # Plan
+    companies_page.select_plan("Free Trial (Free)")
+    companies_page.select_validity("12 months")
+
+    companies_page.click_create_company_button()
+
+    assert companies_page.is_companies_page_displayed()
+
+    # ---------- Search by Email ----------
+
+    companies_page.search_company(data["admin_email"])
+
+    
+
+    assert companies_page.is_email_present(data["admin_email"])
+
+    assert companies_page.get_company_count() == 1
+
+    # ---------- Cleanup ----------
+
+    companies_page.delete_company(data["company_name"])
+
+    companies_page.search_company(data["company_name"])
+
+    assert not companies_page.is_company_present(data["company_name"])
+
+
+@pytest.mark.tc_companies_030
+def test_verify_search_with_invalid_company_name(companies_page):
+
+    # Generate unique test data
+    data = TestDataGenerator.company()
+
+    # ---------- Create Company ----------
+
+    companies_page.click_add_company_button()
+
+    assert companies_page.is_add_company_page_displayed()
+
+    # Company Information
+    companies_page.fill_company_name(data["company_name"])
+    companies_page.select_country("India")
+    companies_page.select_purchase_country("Not locked yet")
+
+    # Admin Credentials
+    companies_page.fill_admin_name(data["admin_name"])
+    companies_page.fill_admin_email(data["admin_email"])
+    companies_page.fill_admin_password(data["admin_password"])
+
+    # Plan
+    companies_page.select_plan("Free Trial (Free)")
+    companies_page.select_validity("12 months")
+
+    companies_page.click_create_company_button()
+
+    assert companies_page.is_companies_page_displayed()
+
+    # ---------- Search with Invalid Company Name ----------
+
+    invalid_company = "InvalidCompany123456"
+
+    companies_page.search_company(invalid_company)
+
+    assert not companies_page.is_company_present(invalid_company)
+
+    assert companies_page.get_company_count() == 0
+
+    # ---------- Cleanup ----------
+
+    companies_page.search_company(data["company_name"])
+
+    companies_page.delete_company(data["company_name"])
+
+    companies_page.search_company(data["company_name"])
+
+    assert not companies_page.is_company_present(data["company_name"])
+
+
+@pytest.mark.tc_companies_031
+def test_verify_clear_search(companies_page):
+
+    # Generate unique test data
+    data = TestDataGenerator.company()
+
+    # ---------- Create Company ----------
+
+    companies_page.click_add_company_button()
+
+    assert companies_page.is_add_company_page_displayed()
+
+    # Company Information
+    companies_page.fill_company_name(data["company_name"])
+    companies_page.select_country("India")
+    companies_page.select_purchase_country("Not locked yet")
+
+    # Admin Credentials
+    companies_page.fill_admin_name(data["admin_name"])
+    companies_page.fill_admin_email(data["admin_email"])
+    companies_page.fill_admin_password(data["admin_password"])
+
+    # Plan
+    companies_page.select_plan("Free Trial (Free)")
+    companies_page.select_validity("12 months")
+
+    companies_page.click_create_company_button()
+
+    assert companies_page.is_companies_page_displayed()
+
+    # ---------- Search Company ----------
+
+    companies_page.search_company(data["company_name"])
+
+    assert companies_page.is_company_present(data["company_name"])
+
+    # ---------- Clear Search ----------
+
+    companies_page.clear_search()
+
+    assert companies_page.is_search_box_empty()
+
+    # Verify company list is restored
+    assert companies_page.get_company_count() > 1
+
+    # ---------- Cleanup ----------
+
+    companies_page.search_company(data["company_name"])
+
+    companies_page.delete_company(data["company_name"])
+
+    companies_page.search_company(data["company_name"])
+
+    assert not companies_page.is_company_present(data["company_name"])
+
+
+@pytest.mark.tc_companies_032
 def test_verify_companies_table_displayed(companies_page):
 
-    assert companies_page.is_visible_with_wait(
-        companies_page.COMPANIES_TABLE
-    )
+    # Verify Companies page is displayed
+    assert companies_page.is_companies_page_displayed()
 
-@pytest.mark.tc_companies_034
-def test_verify_table_headers(companies_page):
+    # Verify Companies table is displayed
+    assert companies_page.is_companies_table_displayed()
+
+@pytest.mark.tc_companies_033
+def test_verify_companies_table_headers(companies_page):
 
     expected_headers = [
-    "SR. NO.",
-    "Company Name",
-    "Admin Details",
-    "Type",
-    "Plan",
-    "Subscription",
-    "Employees",
-    "Expiry/Renewal",
-    "Status",
-    "Created Date",
-    "Actions"
-]
+        "",                 # Checkbox column
+        "SR. NO.",
+        "Company Name",
+        "Admin Details",
+        "Type",
+        "Plan",
+        "Subscription",
+        "Employees",
+        "Expiry/Renewal",
+        "Status",
+        "Created Date",
+        "Actions"
+    ]
 
-    actual_headers = companies_page.get_table_headers(
-        companies_page.TABLE_HEADERS
-    )
+    actual_headers = companies_page.get_table_headers()
 
     assert actual_headers == expected_headers
 
-@pytest.mark.tc_companies_035
+
+@pytest.mark.tc_companies_034
 def test_verify_add_company_page_opens(companies_page):
 
     companies_page.click_add_company_button()
@@ -298,7 +456,7 @@ def test_verify_add_company_page_opens(companies_page):
 
     assert companies_page.is_add_company_page_displayed()
 
-@pytest.mark.tc_companies_036
+@pytest.mark.tc_companies_035
 def test_verify_mandatory_fields(companies_page):
 
     companies_page.click_add_company_button()
@@ -318,7 +476,7 @@ def test_verify_mandatory_fields(companies_page):
 
 
 
-@pytest.mark.tc_companies_037
+@pytest.mark.tc_companies_036
 def test_verify_successful_company_creation(companies_page):
 
     # Generate unique test data

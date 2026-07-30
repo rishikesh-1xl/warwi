@@ -63,6 +63,8 @@ class CompaniesPage(BasePage):
     "//button[normalize-space()='Delete']"
 )
 
+    NO_COMPANIES_FOUND = "//p[normalize-space()='No companies found']"
+
     def __init__(self, page):
         super().__init__(page)
 
@@ -207,11 +209,12 @@ class CompaniesPage(BasePage):
             validity
         )
 
-    def search_company(self, company_name):
+    # def search_company(self, company_name):
 
-        self.fill(self.SEARCH_TEXTBOX, company_name)
+    #     self.fill(self.SEARCH_TEXTBOX, company_name)
 
-        self.page.wait_for_timeout(1000)
+    #     self.page.wait_for_timeout(1000)
+
 
     def is_company_present(self, company_name):
 
@@ -238,3 +241,98 @@ class CompaniesPage(BasePage):
             f"//tr[td[normalize-space()='{company_name}']]"
             f"//button[@title='Actions']"
         )
+
+    # def search_company(self, email):
+    #     self.enter_text(self.SEARCH_TEXTBOX, email)
+
+    # def search_company(self, search_text):
+
+    #     self.fill(self.SEARCH_TEXTBOX, search_text)
+
+    #     self.page.wait_for_load_state("networkidle")
+
+
+    def search_company(self, search_text):
+
+        self.fill(self.SEARCH_TEXTBOX, search_text)
+
+        self.page.keyboard.press("Enter")
+
+        self.page.wait_for_load_state("networkidle")
+
+
+    def is_email_present(self, email):
+
+        locator = self.page.locator(
+            f"//p[normalize-space()='{email}']"
+        )
+
+        return locator.is_visible()
+
+    def is_only_one_company_displayed(self):
+        rows = self.page.locator("//table/tbody/tr")
+        return rows.count() == 1
+
+    # def get_company_count(self):
+    #     return self.page.locator("//table/tbody/tr").count()
+
+    def get_company_count(self):
+
+        rows = self.page.locator("//table/tbody/tr")
+
+        print("Total rows in DOM:", rows.count())
+
+        visible = 0
+
+        for i in range(rows.count()):
+            if rows.nth(i).is_visible():
+                visible += 1
+
+        print("Visible rows:", visible)
+
+        return visible
+
+
+    # def get_company_count(self):
+
+    #     rows = self.page.locator("//table/tbody/tr")
+
+    #     total = rows.count()
+
+    #     visible = 0
+
+    #     print("Total rows in DOM:", total)
+
+    #     for i in range(total):
+    #         print(f"Row {i+1} Visible:", rows.nth(i).is_visible())
+
+    #         if rows.nth(i).is_visible():
+    #             visible += 1
+
+    #     print("Visible rows:", visible)
+
+    #     return visible
+
+
+    def is_no_company_message_displayed(self):
+        return self.is_visible_with_wait(self.NO_COMPANIES_FOUND)
+
+    def clear_search(self):
+        self.page.locator(self.SEARCH_TEXTBOX).clear()
+        self.page.wait_for_load_state("networkidle")
+
+    def is_search_box_empty(self):
+        return self.page.locator(self.SEARCH_TEXTBOX).input_value() == ""
+
+
+    def is_companies_table_displayed(self):
+        return self.is_visible_with_wait(self.COMPANIES_TABLE)
+
+    def get_table_headers(self):
+
+        headers = self.page.locator(self.TABLE_HEADERS)
+
+        return [
+            headers.nth(i).text_content().strip()
+            for i in range(headers.count())
+        ]
