@@ -18,6 +18,7 @@ class LeadsPage(BasePage):
 
     LOST_CARD = "//button[starts-with(normalize-space(),'Lost')]"
     SEARCH_TEXTBOX = "//input[@placeholder='Search by Name or Email ID...']"
+    SUBJECT_DROPDOWN = "//select[@title='Filter by Subject']"
 
 
 
@@ -42,3 +43,15 @@ class LeadsPage(BasePage):
 
     def is_search_textbox_displayed(self):
         return self.is_visible_with_wait(self.SEARCH_TEXTBOX)
+
+    def get_search_placeholder(self):
+        return self.page.locator(self.SEARCH_TEXTBOX).get_attribute("placeholder")
+
+    def is_subject_dropdown_displayed(self):
+        return self.is_visible_with_wait(self.SUBJECT_DROPDOWN)
+
+    def get_subject_dropdown_values(self):
+
+        options = self.page.locator(f"{self.SUBJECT_DROPDOWN}/option").all()
+
+        return [option.text_content().strip() for option in options]

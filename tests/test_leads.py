@@ -42,3 +42,44 @@ def test_verify_search_textbox_displayed(leads_page):
     # Verify Search textbox is displayed
     assert leads_page.is_search_textbox_displayed()
 
+@pytest.mark.tc_leads_005
+def test_verify_search_textbox_placeholder(leads_page):
+
+    # Verify Leads page is displayed
+    assert leads_page.is_leads_page_displayed()
+
+    expected_placeholder = "Search by Name or Email ID..."
+
+    actual_placeholder = leads_page.get_search_placeholder()
+
+    assert actual_placeholder == expected_placeholder
+
+@pytest.mark.tc_leads_006
+def test_verify_subject_dropdown_displayed(leads_page):
+
+    # Verify Leads page is displayed
+    assert leads_page.is_leads_page_displayed()
+
+    # Verify Subject dropdown is displayed
+    assert leads_page.is_subject_dropdown_displayed()
+
+@pytest.mark.tc_leads_007
+def test_verify_subject_dropdown_values(leads_page):
+
+    # Verify Leads page is displayed
+    assert leads_page.is_leads_page_displayed()
+
+    expected_values = [
+        "All Subjects",
+        "General Enquiry",
+        "Request a Demo",
+        "Pricing & Plans",
+        "Technical Support",
+        "Enterprise/Custom Plan",
+        "Partnership"
+    ]
+
+    actual_values = leads_page.get_subject_dropdown_values()
+
+    assert actual_values == expected_values
+
