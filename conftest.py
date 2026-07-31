@@ -19,7 +19,7 @@ from pages.lead_connectors_page import LeadConnectorsPage
 from pages.coupon_codes_page import CouponCodesPage
 from pages.referral_program_page import ReferralProgramPage
 from pages.announcements_page import AnnouncementsPage
-
+from pages.leads_page import LeadsPage
 ...
 
 @pytest.fixture(scope="function")
@@ -199,3 +199,12 @@ def announcements_page(login):
     menu.click_announcements()
 
     return AnnouncementsPage(login)
+
+@pytest.fixture(scope="function")
+def leads_page(login):
+
+    menu = LeftMenu(login)
+
+    menu.click_leads()
+
+    return LeadsPage(login)
