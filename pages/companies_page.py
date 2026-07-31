@@ -64,6 +64,9 @@ class CompaniesPage(BasePage):
 )
 
     NO_COMPANIES_FOUND = "//p[normalize-space()='No companies found']"
+    CANCEL_BUTTON = "//button[normalize-space()='Cancel']"
+    DUPLICATE_COMPANY_VALIDATION = \
+"//*[contains(text(),'Company already exists')]"
 
     def __init__(self, page):
         super().__init__(page)
@@ -336,3 +339,37 @@ class CompaniesPage(BasePage):
             headers.nth(i).text_content().strip()
             for i in range(headers.count())
         ]
+
+    def click_cancel_button(self):
+        self.click(self.CANCEL_BUTTON)
+
+    def is_companies_page_displayed(self):
+        return self.is_visible_with_wait(self.PAGE_HEADING)
+
+
+    def enable_auto_refresh(self):
+
+        checkbox = self.page.locator(self.AUTO_REFRESH_CHECKBOX)
+
+        if not checkbox.is_checked():
+            checkbox.check()
+
+    def is_auto_refresh_checked(self):
+        return self.page.locator(self.AUTO_REFRESH_CHECKBOX).is_checked()
+
+
+    def is_auto_refresh_checked(self):
+        return self.page.locator(self.AUTO_REFRESH_CHECKBOX).is_checked()
+
+
+    def disable_auto_refresh(self):
+
+        checkbox = self.page.locator(self.AUTO_REFRESH_CHECKBOX)
+
+        if checkbox.is_checked():
+            checkbox.uncheck()
+
+    def is_duplicate_company_validation_displayed(self):
+        return self.is_visible_with_wait(
+            self.DUPLICATE_COMPANY_VALIDATION
+        )

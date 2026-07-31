@@ -20,7 +20,7 @@ class LeftMenu(BasePage):
     COMPANIES = "//span[text()='Companies']"
     PLANS = "//span[text()='Plans']"
     BILLING_DASHBOARD = "//span[text()='Billing Dashboard']"
-    LEADS = "//span[text()='Leads']"
+    LEADS = "//span[normalize-space()='Leads']"
     LEAD_CONNECTORS = "//span[text()='Lead Connectors']"
 
     # Marketing Sub Menu
@@ -150,3 +150,17 @@ class LeftMenu(BasePage):
 
         self.open_marketing()
         self.click(self.ANNOUNCEMENTS)
+
+        #--------------------Leads---------------
+
+    def click_leads(self):
+
+        self.page.wait_for_load_state("networkidle")
+
+        self.open_organisation()
+
+        self.page.locator(self.LEADS).wait_for(state="visible")
+
+        self.page.locator(self.LEADS).click()
+
+        self.page.wait_for_url("**/leads")

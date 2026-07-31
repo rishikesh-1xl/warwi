@@ -526,3 +526,106 @@ def test_verify_successful_company_creation(companies_page):
     companies_page.search_company(data["company_name"])
 
     assert not companies_page.is_company_present(data["company_name"])
+
+@pytest.mark.tc_companies_037
+def test_verify_duplicate_company_validation(companies_page):
+
+    # Generate unique company data
+    data = TestDataGenerator.company()
+
+    # ---------- Create Company ----------
+
+    companies_page.click_add_company_button()
+
+    assert companies_page.is_add_company_page_displayed()
+
+    companies_page.fill_company_name(data["company_name"])
+    companies_page.select_country("India")
+    companies_page.select_purchase_country("Not locked yet")
+
+    companies_page.fill_admin_name(data["admin_name"])
+    companies_page.fill_admin_email(data["admin_email"])
+    companies_page.fill_admin_password(data["admin_password"])
+
+    companies_page.select_plan("Free Trial (Free)")
+    companies_page.select_validity("12 months")
+
+    companies_page.click_create_company_button()
+
+    assert companies_page.is_companies_page_displayed()
+
+    # ---------- Try to Create Duplicate Company ----------
+
+    companies_page.click_add_company_button()
+
+    assert companies_page.is_add_company_page_displayed()
+
+    companies_page.fill_company_name(data["company_name"])
+    companies_page.select_country("India")
+    companies_page.select_purchase_country("Not locked yet")
+
+    companies_page.fill_admin_name(data["admin_name"])
+    companies_page.fill_admin_email(data["admin_email"])
+    companies_page.fill_admin_password(data["admin_password"])
+
+    companies_page.select_plan("Free Trial (Free)")
+    companies_page.select_validity("12 months")
+
+    companies_page.click_create_company_button()
+
+    # ---------- Verify Validation ----------
+
+    assert companies_page.is_duplicate_company_validation_displayed()
+
+    # ---------- Cleanup ----------
+
+    companies_page.click_cancel_button()
+
+    companies_page.search_company(data["company_name"])
+
+    companies_page.delete_company(data["company_name"])
+
+    companies_page.search_company(data["company_name"])
+
+    assert not companies_page.is_company_present(data["company_name"])
+
+
+@pytest.mark.tc_companies_038   
+def test_verify_cancel_button(companies_page):
+
+    # Open Add Company page
+    companies_page.click_add_company_button()
+
+    # Verify Add Company page is displayed
+    assert companies_page.is_add_company_page_displayed()
+
+    # Click Cancel button
+    companies_page.click_cancel_button()
+
+    # Verify user is redirected to Companies page
+    assert companies_page.is_companies_page_displayed()
+
+
+@pytest.mark.tc_companies_039
+def test_verify_auto_refresh_on(companies_page):
+
+    # Verify checkbox is displayed
+    assert companies_page.is_auto_refresh_checkbox_displayed()
+
+    # Enable Auto Refresh
+    companies_page.enable_auto_refresh()
+
+    # Verify Auto Refresh is enabled
+    assert companies_page.is_auto_refresh_checked()
+
+@pytest.mark.tc_companies_040
+def test_verify_auto_refresh_off(companies_page):
+
+    # Verify checkbox is displayed
+    assert companies_page.is_auto_refresh_checkbox_displayed()
+
+    # Disable Auto Refresh
+    companies_page.disable_auto_refresh()
+
+    # Verify Auto Refresh is disabled
+    assert not companies_page.is_auto_refresh_checked()
